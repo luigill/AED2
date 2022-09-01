@@ -1,10 +1,12 @@
+// Lui Gill, Luísa Ribeiro e Marcus Monteiro
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
 
 #define MAX_VERTICES 20
-#define INFINITY INT_MAX
+#define INFINITO INT_MAX
 
 int menu();
 void limpaGrafo(int grafo[MAX_VERTICES][MAX_VERTICES], int tamanho);
@@ -166,6 +168,10 @@ void dijkstra(int grafo[MAX_VERTICES][MAX_VERTICES], int tamanho)
 {
   int inicio, final, menorVertice, countVertice = 0, menorDistancia;
   int distancia[tamanho], anterior[tamanho], visitado[tamanho];
+  // vetores auxiliares do tamanho do grafo
+  // distancia -> distancia do vértice inicial até o vértice corrente
+  // anterior -> caminho até o vértice corrente
+  // visitado -> controle dos vértices já visitados
 
   printf("Escolha o número do vértice de partida: \n");
   scanf("%d", &inicio);
@@ -177,9 +183,10 @@ void dijkstra(int grafo[MAX_VERTICES][MAX_VERTICES], int tamanho)
 
   menorVertice = final;
 
+  // inicialização dos vetores
   for (int i = 0; i < tamanho; i++)
   {
-    distancia[i] = INFINITY;
+    distancia[i] = INFINITO;
     anterior[i] = -1;
     visitado[i] = 0;
   }
@@ -189,29 +196,30 @@ void dijkstra(int grafo[MAX_VERTICES][MAX_VERTICES], int tamanho)
 
   while (countVertice < tamanho)
   {
-    menorDistancia = INFINITY;
+    menorDistancia = INFINITO;
 
     for (int i = 0; i < tamanho; i++)
     {
-      if (distancia[i] < menorDistancia && visitado[i] == 0)
+      // Procura vértice com menor distância e que não tenha sido visitado
+      if (distancia[i] < menorDistancia && visitado[i] == 0) // tem conexão com o outro vértice && não foi visitado
       {
         menorDistancia = distancia[i];
         menorVertice = i;
       }
     }
 
-    visitado[menorVertice] = 1;
-
+    // verifica se existe o melhor caminho
+    visitado[menorVertice] = 1; // marca que o nó está sendo visitado
     for (int i = 0; i < tamanho; i++)
     {
       if (grafo[menorVertice][i] != 0)
       {
         if (visitado[i] == 0)
         {
-          if (menorDistancia + grafo[menorVertice][i] < distancia[i])
+          if (menorDistancia + grafo[menorVertice][i] < distancia[i]) // testa se a conexão é menor que a já existente
           {
-            distancia[i] = menorDistancia + grafo[menorVertice][i];
-            anterior[i] = menorVertice;
+            distancia[i] = menorDistancia + grafo[menorVertice][i]; // se sim, atualiza a menor distancia
+            anterior[i] = menorVertice;                             // e salvar na posição do vértice o vértice anterior
           }
         }
       }
@@ -219,7 +227,7 @@ void dijkstra(int grafo[MAX_VERTICES][MAX_VERTICES], int tamanho)
     countVertice++;
   }
 
-  if (distancia[final] == INFINITY)
+  if (distancia[final] == INFINITO)
   {
     printf("Não tem caminhos válidos.\n");
   }
