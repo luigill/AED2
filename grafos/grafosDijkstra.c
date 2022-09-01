@@ -93,12 +93,12 @@ void inserirAresta(int grafo[MAX_VERTICES][MAX_VERTICES], int tamanho)
   {
     printf("Inserir vértice 1: ");
     scanf("%d", &num1);
+    num1--;
 
     printf("Inserir vértice 2: ");
     scanf("%d", &num2);
-
-    num1--;
     num2--;
+
   } while ((num1 < 0 || num1 >= tamanho) && (num2 < 0 || num2 >= tamanho));
 
   printf("Qual o peso da aresta?\n");
@@ -123,16 +123,18 @@ void removerAresta(int grafo[MAX_VERTICES][MAX_VERTICES], int tamanho)
   printf("Escolha o vértice de origem entre 1 e %d\n", tamanho);
   scanf("%d", &num1);
   num1--;
+
   printf("Escolha o vértice de destino entre 1 e %d\n", tamanho);
   scanf("%d", &num2);
   num2--;
-  printf("Removendo...\n");
 
   if (grafo[num1][num2] == 0)
   {
     printf("Não existe aresta nessa posição!\n");
     return;
   }
+
+  printf("Removendo...\n");
 
   grafo[num1][num2] = 0;
   grafo[num2][num1] = 0;
