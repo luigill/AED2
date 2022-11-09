@@ -2,8 +2,21 @@ Algoritmo de Kruskal
 
 - Cada vértice é uma árvore independente (floresta).
 - A cada iteração, procure a aresta de "menor peso" que conecte duas árvores diferentes.
-- Os vértices das árvores selecionadas passam a fazer parte de uma mesma árvore. Repita o processo.
-- O procesos termina quando todos os vértices fazem parte de uma mesma árvore ou quando não
- se pode encontrar uma aresta que satisfaça a condição.
+- Os vértices das árvores selecionadas passam a fazer parte de uma mesma árvore.
+   Repita o processo.
+- O procesos termina quando todos os vértices fazem parte de uma mesma árvore ou 
+quando não se pode encontrar uma aresta que satisfaça a condição.
 
+- Diferente do algoritmo de Prim, constrói uma floreta (várias árvores) ao longo do
+ tempo, e que são unidas no final do processo.
+
+- Desempenho: Grafo com V vértices e E arestas.
+  TODO
+
+- A eficiência do algoritmo depende da forma usada para encontrar a aresta de menor peso.
+-
+
+- Kruskal é um algoritmo guloso.
+  -Algoritmos gulosos sempre  fazem a escolha que parece ser a melhor no momento
+    em questão.
 https://www.youtube.com/watch?v=EzMHc5xW6Pc
