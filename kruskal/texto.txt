@@ -11,12 +11,44 @@ quando não se pode encontrar uma aresta que satisfaça a condição.
  tempo, e que são unidas no final do processo.
 
 - Desempenho: Grafo com V vértices e E arestas.
-  TODO
+  - Pode rodar com O (E log E), ou o equivalente O (E log V):
 
+
+After sorting the edges, which takes O(ElogE) time, Kruskal's algorithm adds the next cheapest edge which doesn't cause a cycle. The question is what data structure can be used to check if a given edge causes a cycle.
+At any given point during the execution of the algorithm, the set of edges chosen by the algorithm forms a forest.
+Initially, the forest contains n trees, where n:=|V|.
+If the next cheapest edge is ab, and vertices a and b belong to different trees in the forest, then the two trees can be combined into a larger tree.
+A data structure for storing the above tree information is to store a parent value for each vertex. Following the parent pointer leads to the root node of the tree.
+If vertices a and b have different roots, then they belong to different trees.
+One can merge the two trees by making b the parent of a. This allows us to maintain a collection of disjoint sets (each set is the vertex set of a tree), whose union is the vertex set of the graph.
+So that the merging of two trees into one tree is done efficiently, the smaller tree can be put under the larger tree (i.e. the one with the smaller rank has its root node point to the other root). 
+This ensures that the trees have small heights, and the path that is followed from a node to find its root has small length.
+Also, in order to not have to follow the same long sequence of parent pointers in subsequent iterations, one can store the root node's value after it is found.
+These are the "union-by-rank" and "path compression" heuristics, which efficiently implement Kruskal's algorithm, so that it runs in O(ElogE)=O(ElogV) time.
+  
 - A eficiência do algoritmo depende da forma usada para encontrar a aresta de menor peso.
 -
 
 - Kruskal é um algoritmo guloso.
   -Algoritmos gulosos sempre  fazem a escolha que parece ser a melhor no momento
     em questão.
+  -Algoritmos gulosos tentam resolver o problema fazendo a escolha localmente ótima
+    em cada fase com a esperança de encontrar um ótimo global.
+  - Nem sempre gera a melhor solução.
+  - Quanto mais informações, maior a chance de produzir uma solução melhor.
+  - Simples e de fácil implementação.
+  -Podem entrar em loop se não detectar a expansão de estados repetidos.
+
+- Pseudo Código
+  algorithm Kruskal(G) is
+    F:= ∅
+    for each v ∈ G.V do
+        MAKE-SET(v)
+    for each (u, v) in G.E ordered by weight(u, v), increasing do
+        if FIND-SET(u) ≠ FIND-SET(v) then
+            F:= F ∪ {(u, v)} ∪ {(v, u)}
+            UNION(FIND-SET(u), FIND-SET(v))
+    return F
+
+    
 https://www.youtube.com/watch?v=EzMHc5xW6Pc
