@@ -19,7 +19,24 @@ void algKruskal(Grafo *gr, int orig, int *pai);
 int main()
 {
   int eh_digrafo = 0;
-  Grafo *gr = cria_grafo(6, 6, 1);
+  Grafo *gr = cria_Grafo(6, 6, 1);
+  insereAresta(gr, 0, 1, eh_digrafo, 6);
+  insereAresta(gr, 0, 2, eh_digrafo, 1);
+  insereAresta(gr, 0, 3, eh_digrafo, 5);
+  insereAresta(gr, 1, 2, eh_digrafo, 2);
+  insereAresta(gr, 1, 4, eh_digrafo, 5);
+  insereAresta(gr, 2, 3, eh_digrafo, 2);
+  insereAresta(gr, 2, 4, eh_digrafo, 6);
+  insereAresta(gr, 2, 5, eh_digrafo, 4);
+  insereAresta(gr, 3, 5, eh_digrafo, 4);
+  insereAresta(gr, 4, 5, eh_digrafo, 3);
+
+  int i, pai[6];
+  algKruskal(gr, 0, pai);
+  for (i = 0; i < 6; i++)
+  {
+    printf("%d: %d\n", pai[i], i);
+  }
 
   return 0;
 }
@@ -69,14 +86,17 @@ int insereAresta(Grafo *gr, int orig, int dest, int eh_digrafo, float peso)
   return 1;
 }
 
-void algKruskal(Grafo *gr, int orig, int *pai) // Parâmetros -> Grafo, vértice de origem e vetor pai
+// Parâmetros -> Grafo, vértice de origem e vetor pai
+void algKruskal(Grafo *gr, int orig, int *pai)
 {
   int i, j, dest, primeiro, NV = gr->nro_vertices;
   double menorPeso;
+  // vetor auxiliar com o mesmo número de vértices do grafo;
   int *arv = (int *)malloc(NV * sizeof(int));
   for (i = 0; i < NV; i++)
   {
     arv[i] = i;  // vetor de árvores, começa como uma árvore independente;
+                 // cada vértice recebe ele mesmo como valor;
     pai[i] = -1; // os vértices não possuem pai ainda
   }
   pai[orig] = orig; // vértice de origem recebe ele mesmo como pai;
@@ -84,15 +104,18 @@ void algKruskal(Grafo *gr, int orig, int *pai) // Parâmetros -> Grafo, vértice
   // Começa a busca
   while (1)
   {
-    primeiro = 1;
+    primeiro = 1;            // teste de condição;
     for (i = 0; i < NV; i++) // percorre os vértices;
     {
       for (j = 0; j < gr->grau[i]; j++) // percorre as arestas daquele vértice;
       {
-        // procura o vértice de menor peso;
+        // procura a aresta de menor custo;
+
+        // caso os vértices sejam diferentes, é possível conectar eles em uma mesma árvore;
+        // gr->arestas[i][j] = aresta que liga i a j;
         if (arv[i] != arv[gr->arestas[i][j]])
         {
-          if (primeiro)
+          if (primeiro) // já se tentou conectar alguém antes?
           {
             menorPeso = gr->pesos[i][j];
             orig = i;
@@ -100,12 +123,13 @@ void algKruskal(Grafo *gr, int orig, int *pai) // Parâmetros -> Grafo, vértice
             primeiro = 0;
           }
           else
+          // trata quando se acha alguma aresta menor do que a anterior;
           {
             if (menorPeso > gr->pesos[i][j])
             {
-              menorPeso = gr->pesos[i][j];
+              menorPeso = gr->pesos[i][j]; // menor peso passa a ser o novo peso da aresta testada;
               orig = i;
-              dest = gr->arestas[i][j];
+              dest = gr->arestas[i][j]; // dest passa a ser a aresta conectando i e j;
             }
           }
         }
@@ -113,11 +137,13 @@ void algKruskal(Grafo *gr, int orig, int *pai) // Parâmetros -> Grafo, vértice
     }
     if (primeiro == 1) // caso nenhum vértice tenha satisfeito a condição ou todos ja fazem parte da árvore geradora;
       break;
+    // tratamento para ajuste de pais;
     if (pai[orig] == -1)
       pai[orig] = dest;
     else
       pai[dest] = orig;
-
+    // os vértices passam a fazer parte da mesma árvore;
+    // transforma-se as árvores orig e dest no mesmo identificador;
     for (i = 0; i < NV; i++)
     {
       if (arv[i] == arv[dest])
